@@ -69,7 +69,6 @@ The architecture follows a **layered approach**:
    MONGO_URI=mongodb://root:example@mongodb:27017/auction_db?authSource=admin
    REDIS_HOST=redis
    REDIS_PORT=6379
-   JWT_SECRET=your_jwt_secret
    ```
 
 #### 4.3 Running the Application
@@ -96,7 +95,6 @@ The full API documentation is hosted on Postman and can be accessed here:
 This includes:
 - Endpoints for creating auctions, placing bids, and fetching auction data.
 - Descriptions for all API routes with example responses.
-- Authorization requirements for restricted endpoints (e.g., JWT tokens for creating auctions or placing bids).
 
 ---
 
