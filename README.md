@@ -1,85 +1,164 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Auction System Backend - README
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+### Table of Contents
+1. [Overview](#overview)
+2. [Architecture](#architecture)
+3. [Technologies Used](#technologies-used)
+4. [Getting Started](#getting-started)
+   - [Prerequisites](#prerequisites)
+   - [Installation](#installation)
+   - [Running the Application](#running-the-application)
+5. [API Documentation](#api-documentation)
+6. [Unit Testing](#unit-testing)
+7. [Thought Process](#Thought-Process)
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### 1. Overview
 
-## Project setup
+This project is a backend service for an **Auction System**, built using **NestJS** with **MongoDB** as the primary database and **Redis** for caching. The application is containerized using **Docker**, making it easy to set up in various environments. 
+
+The service provides endpoints for managing auctions, placing bids, and handling real-time data.
+
+### 2. Architecture
+
+The architecture follows a **layered approach**:
+- **Controller Layer**: Manages incoming HTTP requests and WebSocket events.
+- **Service Layer**: Contains business logic related to auctions and bids.
+- **Database Layer**: Uses **MongoDB** (via **Mongoose**) for data persistence and **Redis** for caching.
+- **Authentication**: Secured with **JWT** tokens and **RBAC** for access control (Future).
+
+#### Key Architectural Decisions:
+- **MongoDB**: Used for its flexibility and scalability in handling auction and bid data.
+- **Redis**: Used to cache auction data to enhance performance and reduce the number of reads from MongoDB.
+- **Docker**: Containers ensure consistency across environments, isolating services for better scalability.
+- **Authentication (Future)**: Uses JWT for stateless authentication and supports role-based authorization for better security management.
+- **WebSockets (Future)**: Designed to support real-time features for bid tracking and notifications.
+
+---
+
+### 3. Technologies Used
+
+- **Node.js**: JavaScript runtime environment.
+- **NestJS**: Framework for building efficient, scalable Node.js applications.
+- **MongoDB**: NoSQL database for storing auction and bid data.
+- **Redis**: In-memory data store for caching.
+- **Docker**: Containerization of the app for isolated, scalable services.
+- **Postman**: API testing and documentation.
+
+---
+
+### 4. Getting Started
+
+#### 4.1 Prerequisites
+
+- **Docker**: Ensure Docker is installed on your machine. Installation instructions can be found [here](https://docs.docker.com/get-docker/).
+
+#### 4.2 Installation
+
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/Mravatech/solid-octo-barnacle.git
+   cd solid-octo-barnacle
+   ```
+
+2. **Environment Variables**:
+   Create a `.env` file in the root of your project and add the following:
+   ```bash
+   MONGO_URI=mongodb://root:example@mongodb:27017/auction_db?authSource=admin
+   REDIS_HOST=redis
+   REDIS_PORT=6379
+   JWT_SECRET=your_jwt_secret
+   ```
+
+#### 4.3 Running the Application
+
+To run the application using Docker, simply run:
 
 ```bash
-$ npm install
+docker-compose up --build
 ```
 
-## Compile and run the project
+This will start the following services:
+- **MongoDB**: Database for the auctions and bids.
+- **Redis**: In-memory store for caching auction data.
+- **NestJS App**: Auction service that provides APIs for managing auctions and bids.
+
+---
+
+### 5. API Documentation
+
+The full API documentation is hosted on Postman and can be accessed here:
+
+[Postman API Documentation](https://documenter.getpostman.com/view/1317561/2sAXqs83Mo)
+
+This includes:
+- Endpoints for creating auctions, placing bids, and fetching auction data.
+- Descriptions for all API routes with example responses.
+- Authorization requirements for restricted endpoints (e.g., JWT tokens for creating auctions or placing bids).
+
+---
+
+### 6. Unit Testing
+
+The application includes unit tests written using **Jest**. Tests cover the core functionality of auctions, bids, and business logic, ensuring data consistency and proper handling of edge cases.
+
+#### Running Unit Tests
+
+To run the tests, execute:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm run test
 ```
 
-## Run tests
+- **Test Coverage**: The tests ensure that auctions are created, bids are placed, and errors are properly handled.
+- **Mocking**: Services like MongoDB and Redis are mocked to test the business logic independently of the actual database.
 
+Sample test output:
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+PASS  src/auction/auction.service.spec.ts
+✓ should create a new auction (300ms)
+✓ should place a bid on an auction (150ms)
+✓ should retrieve an auction by id (120ms)
+✓ should throw an error if auction not found (50ms)
 ```
 
-## Resources
 
-Check out a few resources that may come in handy when working with NestJS:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
 
-## Support
+###  Thoughts Pocess
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+#### 1.Core Requirements:
+  - **Auction Service**: A scalable backend service for managing auctions and bids.
+  - **MongoDB as the Database**: MongoDB was chosen because it is a NoSQL database that provides excellent flexibility in managing evolving schemas. Auctions and bids can have variable structures, which fits well with MongoDB’s document-based model.
+  - **Redis for Caching**: Redis is a high-performance, in-memory key-value store. It’s optimal for caching auction data (which is accessed frequently but changes less often), minimizing the load on MongoDB and improving performance.
+  - *Docker for Containerization*: Docker ensures that all the services (NestJS, MongoDB, Redis) are isolated, reproducible, and portable across different environments.
 
-## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+#### 2. Considerations and Tradeoffs:
 
-## License
+- ### Caching with Redis:
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+  - Why Redis? Redis improves performance by caching frequently requested data (e.g., auction listings). This reduces MongoDB queries, thus reducing latency for end users. I opted for Redis over in-memory Node.js caching because Redis provides a more scalable solution, especially in distributed environments.
+  - Tradeoff: Redis can introduce data inconsistency if the cache is not carefully managed. However, by setting appropriate TTLs and using invalidation strategies, we mitigate stale data issues.
+
+- ### MongoDB vs Relational Databases:
+
+  - Why MongoDB? Auctions and bids are dynamic in nature and MongoDB’s flexible document model allows for evolving data schemas without needing complex migrations.
+  - Tradeoff: MongoDB is eventually consistent, so strict transactional guarantees are not always available. However, for an auction system, this is acceptable as long as we ensure proper locking or bid placement order.
+
+- ### Using Docker for Development and Deployment:
+
+  - Why Docker? By containerizing the entire application (NestJS, Redis, MongoDB), we ensure consistency across development, staging, and production environments. Docker simplifies both local development and deployment pipelines by ensuring the same environment is reproducible anywhere.
+  - Tradeoff: Containers introduce an additional overhead in terms of resource usage compared to running services natively. However, the benefit of environment parity and ease of orchestration outweighs the slight performance overhead for this project.
+
+#### 3. Future Considerations
+
+#### 1. **Authentication and Authorization**:
+- **JWT Authentication**: The application can be enhanced by implementing **JWT-based authentication**. Each user would receive a token after logging in, which would then be used to authenticate all subsequent requests. Tokens will be validated before performing any actions like bidding or creating auctions.
+- **RBAC (Role-Based Access Control)**: We will implement role-based access to distinguish between different types of users, such as **bidders**, **auctioneers**, and **admins**.
+
+
+#### 2. **Real-Time Bidding with WebSockets**:
+- The next iteration of the system could integrate WebSockets for real-time updates on auctions and bids. This allows users to receive live updates about ongoing bids and time remaining for auctions.
